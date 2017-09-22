@@ -8,16 +8,15 @@ patches-own []
 
 to setup
   clear-all
-  set-default-shape ants "bug" ;; really no reason to do this considering how zoomed out we are. might just remove this.
+  set-default-shape ants "bug"
   set screen-area (max-pxcor * max-pycor * 4)
   set out-pher 1000
   set in-pher 300
-  ;;setup-patches
+  setup-patches
   setup-food
 end
 
 to setup-patches
-  ;;probably best to avoid this because it slows things down.
   ask patches [
     set pcolor brown
   ]
