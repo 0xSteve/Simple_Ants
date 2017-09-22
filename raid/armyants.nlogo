@@ -1,4 +1,4 @@
-globals[screen-area vol-food out-pher in-pher]
+globals[screen-area vol-food out-pher in-pher evap]
 breed [foods food]
 breed [ants ant]
 
@@ -12,6 +12,7 @@ to setup
   set screen-area (max-pxcor * max-pycor * 4)
   set out-pher 1000
   set in-pher 300
+  set evap (1 / 30)
   ;;setup-patches
   setup-food
 end
@@ -85,36 +86,6 @@ GRAPHICS-WINDOW
 1
 ticks
 30.0
-
-SLIDER
-29
-35
-207
-68
-evaporation-rate
-evaporation-rate
-0
-100
-50.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-3
-80
-249
-113
-phermone-concentration
-phermone-concentration
-0
-1000
-100.0
-1
-1
-NIL
-HORIZONTAL
 
 BUTTON
 290
