@@ -1,5 +1,50 @@
 ;;Simple ACO algorithm implementation from Fundamentals of Natural Computing
 ;;de Castro
+globals [max_it num_ants tao_not]
+breed [nodes node]
+breed [ants ant]
+to setup
+  clear-all
+  setup-nodes
+  setup-spatially-clustered-network
+  setup-ants
+end
+
+to setup-nodes
+  set-default-shape nodes "circle"
+
+  create-nodes num_nodes
+  [
+    ;;make the network
+    set color grey
+    setxy (random-xcor * 0.95) (random-ycor * 0.95)
+  ]
+end
+
+to setup-spatially-clustered-network
+  let num-links (average_node_degree * num_nodes) / 2
+  while [count links < num-links ]
+  [
+    ask one-of nodes
+    [
+      let choice (min-one-of (other nodes with [not link-neighbor? myself])
+                   [distance myself])
+      if choice != nobody [ create-link-with choice ]
+    ]
+  ]
+  ; make the network look a little prettier
+  repeat 10
+  [
+    layout-spring nodes links 0.3 (world-width / (sqrt num_nodes)) 1
+  ]
+end
+
+to setup-ants
+  ask links [
+    ;; spawn ants randomly on links
+
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -27,6 +72,53 @@ GRAPHICS-WINDOW
 1
 ticks
 30.0
+
+BUTTON
+34
+53
+107
+86
+NIL
+setup\n
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+SLIDER
+30
+101
+189
+134
+num_nodes
+num_nodes
+0
+1000
+69.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+17
+139
+189
+172
+average_node_degree
+average_node_degree
+2
+100
+9.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
