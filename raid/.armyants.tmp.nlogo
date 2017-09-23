@@ -1,10 +1,10 @@
-globals[screen-area vol-food out-pher in-pher evap xhome yhome clock]
+globals[screen-area vol-food out-pher in-pher evap xhome yhome clock nest-food]
 breed [foods food]
 breed [ants ant]
 
-ants-own [hasfood? move?]
+ants-own [hasfood? move? hasleft? ishome? leaving? num-dead]
 foods-own []
-patches-own [p]
+patches-own [phermone]
 
 to setup
   clear-all
@@ -17,6 +17,7 @@ to setup
   set xhome 0
   set yhome -98
   set clock 0
+  set nest-food 0
   set evap (1 / 30)
   ;;setup-patches
   setup-food
@@ -24,6 +25,7 @@ end
 
 to step
   setup-ants
+  ant-move
 end
 
 to clear
@@ -34,6 +36,7 @@ to go
   if clock < it-max
   [
     set clock (clock + 1)
+    step
   ]
   tick
 end
@@ -82,15 +85,94 @@ end
 
 to setup-ants
   ;;All ants start at the bivouac
+  ;; maybe i should kill ants that refuse to leave the nest?
+  ask ants
+  [
+    if hasleft? = false
+    [
+      die
+      set num-dead (num-dead + 1)
+    ]
+  ]
   create-ants 10
   [
     set hasfood? false
+    set hasleft? false
+    set ishome? true
     set heading 0
     ;;have to send them home
-    set color white
+    set color black
     setxy xhome yhome
     set move? false
   ]
+end
+
+to ant-move
+  ask ants
+  [
+    ifelse ishome?
+    [;;currently at home, time to make a move.
+      set color white
+      set heading 0
+      set ishome? false
+      set hasleft? true
+      if hasfood?
+      [
+        set hasfood? false
+        set nest-food (nest-food + 1)
+      ]
+    ]
+    [;;else;;
+      ifelse (abs(xcor) > max-pxcor - 1.5) or (abs(ycor) > max-pycor - 1.5) ;;ant is off the world.
+      [
+        die
+      ]
+      [;;else;;
+        ifelse hasfood?
+        [
+          set color red
+          ;;If sufficiently close to the nest, become home.
+          if distancexy-nowrap xhome yhome < 2
+                  [
+                    set xCor xhome
+                    set yCor yhome
+                    set ishome? true
+                  ]
+          ;;pick your move from the home base
+        ]
+        [;;else;;
+          ;;find-food
+        ]
+      ]
+    ]
+  ]
+end
+
+to lay-phermone
+  ifelse (leaving?)
+  [
+    if (phermone < out-pher)
+    [
+    ]
+  ]
+  [;;else;;
+    if (phermone < in-pher)
+    [
+    ]
+  ]
+end
+
+to find-food
+  ifelse (count foods-here > 0)
+  [
+    set vol-food (vol-food - 1)
+    ask mfoods-here [
+
+  ]
+  [;;else;;
+  ]
+
+
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
