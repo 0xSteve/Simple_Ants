@@ -1,20 +1,41 @@
-globals[screen-area vol-food out-pher in-pher evap]
+globals[screen-area vol-food out-pher in-pher evap xhome yhome clock]
 breed [foods food]
 breed [ants ant]
 
-ants-own []
+ants-own [hasfood? move?]
 foods-own []
-patches-own []
+patches-own [phermone]
 
 to setup
   clear-all
+  reset-ticks
   set-default-shape ants "bug" ;; really no reason to do this considering how zoomed out we are. might just remove this.
+  set-default-shape foods "circle" ;; food can be a circle, right?
   set screen-area (max-pxcor * max-pycor * 4)
   set out-pher 1000
   set in-pher 300
+  set xhome 0
+  set yhome -98
+  set clock 0
   set evap (1 / 30)
   ;;setup-patches
   setup-food
+end
+
+to step
+  setup-ants
+end
+
+to clear
+  clear-all
+end
+
+to go
+  if clock < it-max
+  [
+    set clock (clock + 1)
+  ]
+  tick
 end
 
 to setup-patches
@@ -23,6 +44,7 @@ to setup-patches
     set pcolor brown
   ]
 end
+
 to setup-food
     let rand 0
 
@@ -54,10 +76,21 @@ to setup-food
                     ]
                 ]
             ]
-       set color green    ;; Makes sure all food is same color
+       set color green    ;; Makes sure all food is green, pretend the ants are vegan.
      ]
-;        set amtFood (count food)
+end
 
+to setup-ants
+  ;;All ants start at the bivouac
+  create-ants 10
+  [
+    set hasfood? false
+    set heading 0
+    ;;have to send them home
+    set color white
+    setxy xhome yhome
+    set move? false
+  ]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -113,7 +146,73 @@ amount-food
 amount-food
 0
 100
-24.0
+25.0
+1
+1
+NIL
+HORIZONTAL
+
+BUTTON
+326
+104
+390
+137
+NIL
+step
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+356
+177
+419
+210
+NIL
+go
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+211
+42
+278
+75
+NIL
+clear
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+SLIDER
+132
+237
+304
+270
+it-max
+it-max
+1
+100000
+1500.0
 1
 1
 NIL
