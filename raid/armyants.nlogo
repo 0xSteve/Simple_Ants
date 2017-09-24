@@ -11,7 +11,7 @@ to setup
   reset-ticks
   set-default-shape ants "bug" ;; really no reason to do this considering how zoomed out we are. might just remove this.
   set-default-shape foods "circle" ;; food can be a circle, right?
-  set screen-area (max-pxcor * max-pycor * 4)
+  set screen-area (max-pxcor * max-pycor * 2) ;;times 2 if bottom center, times 4 if middle
   set out-pher 1000
   set in-pher 300
   set xhome 0
@@ -69,7 +69,8 @@ to setup-food
       ]
     ask foods
       [
-      ;;Do this because 0,0 is in the center of the map.
+      ;;Do this eventhough 0,0 is at the bottom edge?
+      ;;Just quarter up the food so it looks good xD
         set rand random 100
         ifelse rand <= 25
             [ set xcor (random world-width)
@@ -100,11 +101,12 @@ to setup-ants
   [
     if (not hasleft?)
     [
-      die
-      set num-dead (num-dead + 1)
+      ;;maybe not for now...
+      ;;die
+      ;;set num-dead (num-dead + 1)
     ]
   ]
-  create-ants 10
+  create-ants antspinterval
   [
     set hasfood? false
     set hasleft? false
@@ -575,6 +577,21 @@ evap
 0
 100
 30.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+260
+444
+432
+477
+antspinterval
+antspinterval
+1
+100
+10.0
 1
 1
 NIL
