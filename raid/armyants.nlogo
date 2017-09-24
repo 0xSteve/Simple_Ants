@@ -363,11 +363,12 @@ to pick-a-patch-returned
       [
         ;;is this even a legal move? I'm not sure, but it at least goes towards the home.
         set heading 180
-        jump 1
+        jump 0
         set move? false
       ]
-      [ set p_l (p_l / (p_l + p_r) )
-        set p_r (p_r / (p_l + p_r) )
+      [
+        ;;set p_l (p_l / (p_l + p_r) )
+        ;;set p_r (p_r / (p_l + p_r) )
       ]
     ]
   ]
@@ -428,7 +429,7 @@ to evaporate
 
       if (phermone > 0)
         [
-          set phermone phermone * (100 - evap) / 100
+          set phermone (phermone * ((100 - evap) / 100))
         ]
     ]
 
@@ -437,11 +438,11 @@ end
 GRAPHICS-WINDOW
 429
 10
-740
-622
+839
+621
 -1
 -1
-3.0
+2.0
 1
 10
 1
@@ -451,10 +452,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--50
-50
+-100
+100
 0
-200
+300
 1
 1
 1
@@ -487,7 +488,7 @@ amount-food
 amount-food
 0
 100
-17.0
+10.0
 1
 1
 NIL
@@ -553,7 +554,7 @@ it-max
 it-max
 1
 100000
-1500.0
+47134.0
 1
 1
 NIL
@@ -585,7 +586,7 @@ k
 k
 1
 100
-5.0
+1.0
 1
 1
 NIL
@@ -600,7 +601,7 @@ n
 n
 1
 100
-2.0
+1.0
 1
 1
 NIL
@@ -615,7 +616,7 @@ evap
 evap
 0
 100
-11.0
+81.0
 1
 1
 NIL
@@ -630,7 +631,7 @@ antspinterval
 antspinterval
 1
 100
-20.0
+10.0
 1
 1
 NIL
@@ -645,7 +646,7 @@ antsperpatch
 antsperpatch
 10
 100
-20.0
+10.0
 5
 1
 NIL
@@ -660,11 +661,30 @@ food-density
 food-density
 1
 100
-3.0
+2.0
 1
 1
 NIL
 HORIZONTAL
+
+PLOT
+70
+618
+486
+1006
+plot 1
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plotxy clock found-food"
+"pen-1" 1.0 0 -7500403 true "" "plotxy clock nest-food"
 
 @#$#@#$#@
 ## WHAT IS IT?
