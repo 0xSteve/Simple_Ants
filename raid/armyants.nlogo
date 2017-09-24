@@ -1,4 +1,4 @@
-globals[screen-area vol-food out-pher in-pher evap xhome yhome clock nest-food]
+globals[screen-area vol-food out-pher in-pher evap xhome yhome clock nest-food sqrt2]
 breed [foods food]
 breed [ants ant]
 
@@ -19,6 +19,7 @@ to setup
   set clock 0
   set nest-food 0
   set evap (1 / 30)
+  set sqrt2 1.41421356
   ;;setup-patches
   setup-food
 end
@@ -30,6 +31,13 @@ end
 
 to clear
   clear-all
+end
+
+to test
+  ask ants
+  [
+    pick-a-patch
+  ]
 end
 
 to go
@@ -162,11 +170,15 @@ to lay-phermone
   ]
 end
 
+to-report phermones
+  report [phermone] of patch-at dx dy
+end
+
 to find-food
   ifelse (count foods-here > 0)
   [
     set vol-food (vol-food - 1)
-    ask max-one-of foods-here
+    ask foods-here
     [
       die
     ]
@@ -174,8 +186,18 @@ to find-food
   ]
   [;;else;;
   ]
+end
 
+to pick-a-patch
+  ;;the move after leaving home
 
+  ;;need some hyperbolic tan
+  let l_l phermones
+  let l_r phermones
+
+end
+to pick-next-patch
+  ;;any move not from the home
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -231,7 +253,7 @@ amount-food
 amount-food
 0
 100
-25.0
+3.0
 1
 1
 NIL
@@ -302,6 +324,23 @@ it-max
 1
 NIL
 HORIZONTAL
+
+BUTTON
+254
+114
+332
+147
+NIL
+test
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
