@@ -1,4 +1,4 @@
-globals[screen-area vol-food out-pher in-pher xhome yhome clock nest-food sqrt2 antsperpatch found-food]
+globals[screen-area vol-food out-pher in-pher xhome yhome clock nest-food sqrt2 found-food snap-to-home]
 breed [foods food]
 breed [ants ant]
 
@@ -17,7 +17,7 @@ to setup
   set xhome 0
   set yhome 0
   set clock 0
-  set antsperpatch 10
+  set snap-to-home 5
   set found-food 0
   set nest-food 0
   set sqrt2 1.41421356
@@ -101,11 +101,12 @@ to setup-ants
   [
     if (not hasleft?)
     [
-      ;die
-      set num-dead (num-dead + 1)
+      ;;maybe not for now...
+      ;;die
+      ;;set num-dead (num-dead + 1)
     ]
   ]
-  create-ants 10
+  create-ants antspinterval
   [
     set hasfood? false
     set hasleft? false
@@ -141,15 +142,16 @@ to ant-move
       [;;else;;
         ifelse hasfood?
         [
+          ;;if the ant has food send it home!
           set color red
           ;;If sufficiently close to the nest, become home.
-          if distancexy-nowrap xhome yhome < 2
+          if distancexy-nowrap xhome yhome < snap-to-home
                   [
                     set xCor xhome
                     set yCor yhome
                     set ishome? true
                   ]
-          ;;been thinking about this wrong
+          ;;pick a patch facing the home base.
           pick-a-patch-returned
         ]
         [;;else;;
@@ -313,64 +315,60 @@ to pick-a-patch-returned
   ;; Does it move?
   set P_m ( 0.5 * (tanh + 1) )
 
-  if ( x < P_m)
+  ;;if they are returning home they should never question whether or not to move.
+  set move? true
+  set hasleft? true
+  lay-phermone
+
+  ;;get p_l
+  set p_l ( ((k + l_l) ^ n) / ( (k + l_l) ^ n + (k + l_r) ^ n ) )
+  set p_r ( 1 - p_l )
+
+  ;;The ants returning seem to be very far from the formation. perhaps if there is some bias?
+  let threshold 5
+  if (l_l < threshold)
   [
-    set move? true
-    set hasleft? true
-    lay-phermone
-  ]
+    set p
 
-  ;;maybe break this bit into two just for a bit...
-
-  if (move?)
+  ifelse (x < p_l)
   [
-    ;;get p_l
-    set p_l ( ((k + l_l) ^ n) / ( (k + l_l) ^ n + (k + l_r) ^ n ) )
-    set p_r ( 1 - p_l )
-
-    ;; roll the dice again to see which direction we travel
-    set x ( (random 100) / 100)
-    ifelse (x < p_l)
+    ;;turn left;;
+    set heading 225
+    ifelse (ants-at-pos < antsperpatch)
     [
-      ;;turn left;;
-      set heading 180 ;;reset heading
-      set heading 225
+      jump sqrt2
+      set heading 0
+    ]
+    [;;else;;
+      set heading 135
       ifelse (ants-at-pos < antsperpatch)
       [
         jump sqrt2
         set heading 0
       ]
-      [;;else;;
-        set heading 135
-        ifelse (ants-at-pos < antsperpatch)
-        [
-          jump sqrt2
-          set heading 0
-        ]
-        [
-          ;;can't move!
-        ]
+      [
+        ;;can't move!
       ]
     ]
+  ]
+  [
+    ;;turn right;;
+    set heading 0 ;;reset heading
+    set heading 135
+    ifelse (ants-at-pos < antsperpatch)
     [
-      ;;turn right;;
-      set heading 0 ;;reset heading
-      set heading 135
+      jump sqrt2
+      set heading 180
+    ]
+    [;;else;;
+      set heading 225
       ifelse (ants-at-pos < antsperpatch)
       [
         jump sqrt2
         set heading 180
       ]
-      [;;else;;
-        set heading 225
-        ifelse (ants-at-pos < antsperpatch)
-        [
-          jump sqrt2
-          set heading 180
-        ]
-        [
-          ;;can't move!
-        ]
+      [
+        ;;can't move!
       ]
     ]
   ]
@@ -575,8 +573,38 @@ evap
 evap
 0
 100
-30.0
+11.0
 1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+260
+444
+432
+477
+antspinterval
+antspinterval
+1
+100
+20.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+193
+391
+365
+424
+antsperpatch
+antsperpatch
+10
+100
+20.0
+5
 1
 NIL
 HORIZONTAL
