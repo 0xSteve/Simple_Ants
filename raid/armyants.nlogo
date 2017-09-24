@@ -17,6 +17,7 @@ to setup
   set xhome 0
   set yhome -98
   set clock 0
+  set antsperpatch 10
   set nest-food 0
   set evap (1 / 30)
   set sqrt2 1.41421356
@@ -223,7 +224,6 @@ to pick-a-patch
 
   if ( x < P_m)
   [
-    print("Agent will move")
     set move? true
     set hasleft? true
     lay-phermone
@@ -241,7 +241,6 @@ to pick-a-patch
     set x ( (random 100) / 100)
     ifelse (x < p_l)
     [
-      print("agent turns left!")
       ;;turn left;;
       set heading 0 ;;reset heading
       lt 45
@@ -265,7 +264,6 @@ to pick-a-patch
     ]
     [
       ;;turn right;;
-      print("agent turns right!")
       set heading 0 ;;reset heading
       rt 45
       ifelse (ants-at-pos < antsperpatch)

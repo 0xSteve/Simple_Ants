@@ -17,6 +17,7 @@ to setup
   set xhome 0
   set yhome -98
   set clock 0
+  set antsperpatch 10
   set nest-food 0
   set evap (1 / 30)
   set sqrt2 1.41421356
@@ -223,7 +224,6 @@ to pick-a-patch
 
   if ( x < P_m)
   [
-    print("Agent will move")
     set move? true
     set hasleft? true
     lay-phermone
@@ -259,7 +259,7 @@ to pick-a-patch
         ]
         [
           ;;can't move!
-          set heading 0
+          fd 0
         ]
       ]
     ]
@@ -281,7 +281,7 @@ to pick-a-patch
           set heading 0
         ]
         [
-
+          jump 0
         ]
       ]
     ]
