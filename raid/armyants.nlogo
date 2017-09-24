@@ -1,4 +1,4 @@
-globals[screen-area vol-food out-pher in-pher evap xhome yhome clock nest-food sqrt2 antsperpatch]
+globals[screen-area vol-food out-pher in-pher evap xhome yhome clock nest-food sqrt2 antsperpatch found-food]
 breed [foods food]
 breed [ants ant]
 
@@ -15,9 +15,10 @@ to setup
   set out-pher 1000
   set in-pher 300
   set xhome 0
-  set yhome -98
+  set yhome 0
   set clock 0
   set antsperpatch 10
+  set found-food 0
   set nest-food 0
   set evap (1 / 30)
   set sqrt2 1.41421356
@@ -28,10 +29,7 @@ end
 to step
   setup-ants
   ant-move
-  ;;remove this line
-  ask ants [
-  pick-a-patch
-  ]
+  evaporate
 end
 
 to clear
@@ -151,10 +149,11 @@ to ant-move
                     set yCor yhome
                     set ishome? true
                   ]
-          ;;pick your move from the home base
+          ;;been thinking about this wrong
+          pick-a-patch-returned
         ]
         [;;else;;
-          ;;find-food
+          find-food
         ]
       ]
     ]
@@ -172,7 +171,7 @@ to lay-phermone
   [;;else;;
     if (phermone < in-pher)
     [
-      set phermone (phermone + 1)
+      set phermone (phermone + 10)
     ]
   ]
 end
@@ -192,9 +191,15 @@ to find-food
     [
       die
     ]
-
+    set hasfood? true
+    set found-food (found-food + 1)
+    ;;turn around
+    set heading 180
+    ;;go home
+    pick-a-patch-returned
   ]
   [;;else;;
+    pick-a-patch
   ]
 end
 
@@ -258,7 +263,6 @@ to pick-a-patch
         ]
         [
           ;;can't move!
-          fd 0
         ]
       ]
     ]
@@ -279,7 +283,7 @@ to pick-a-patch
           set heading 0
         ]
         [
-          jump 0
+          ;;can't move
         ]
       ]
     ]
@@ -288,6 +292,106 @@ to pick-a-patch
 end
 to pick-a-patch-returned
   ;;should be a bit better than test it every time to see if it's facing home.
+  ;;need some hyperbolic tan
+  let l_l 0
+  let l_r 0
+  let z 0
+  let tanh 0
+  let P_m 0
+  let x ( (random 100) / 100)
+  let p_l 0
+  let p_r 0
+
+  ;;i should set heading to 180 and rotate, but i dont feel like thinking
+  set heading 135 ;; turn left 45 degrees from normal
+  set l_l phermones
+  set heading 225 ;; turn right 45 degrees from normal
+  set l_r phermones
+  set heading 180 ;;return to normal
+  set z ( ( (l_l + l_r) / 100) - 1)
+  set tanh ( ( exp(2 * z) - 1 ) / ( exp(2 * z) + 1 ) )
+  ;; Does it move?
+  set P_m ( 0.5 * (tanh + 1) )
+
+  if ( x < P_m)
+  [
+    set move? true
+    set hasleft? true
+    lay-phermone
+  ]
+
+  ;;maybe break this bit into two just for a bit...
+
+  if (move?)
+  [
+    ;;get p_l
+    set p_l ( ((k + l_l) ^ n) / ( (k + l_l) ^ n + (k + l_r) ^ n ) )
+    set p_r ( 1 - p_l )
+
+    ;; roll the dice again to see which direction we travel
+    set x ( (random 100) / 100)
+    ifelse (x < p_l)
+    [
+      ;;turn left;;
+      set heading 180 ;;reset heading
+      set heading 225
+      ifelse (ants-at-pos < antsperpatch)
+      [
+        jump sqrt2
+        set heading 0
+      ]
+      [;;else;;
+        set heading 135
+        ifelse (ants-at-pos < antsperpatch)
+        [
+          jump sqrt2
+          set heading 0
+        ]
+        [
+          ;;can't move!
+        ]
+      ]
+    ]
+    [
+      ;;turn right;;
+      set heading 0 ;;reset heading
+      set heading 135
+      ifelse (ants-at-pos < antsperpatch)
+      [
+        jump sqrt2
+        set heading 180
+      ]
+      [;;else;;
+        set heading 225
+        ifelse (ants-at-pos < antsperpatch)
+        [
+          jump sqrt2
+          set heading 180
+        ]
+        [
+          ;;can't move!
+        ]
+      ]
+    ]
+  ]
+  set move? false
+end
+
+to evaporate
+
+  ask patches
+    [
+      if (phermone < 0)
+      [
+        set phermone 0
+      ]
+
+      if (phermone > 0)
+        [
+          set phermone phermone * (100 - evap) / 100
+        ]
+    ]
+
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -309,10 +413,10 @@ GRAPHICS-WINDOW
 1
 -50
 50
--100
-100
 0
-0
+200
+1
+1
 1
 ticks
 30.0
@@ -343,7 +447,7 @@ amount-food
 amount-food
 0
 100
-3.0
+17.0
 1
 1
 NIL
