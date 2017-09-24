@@ -106,6 +106,7 @@ to setup-ants
   [
     set hasfood? false
     set hasleft? false
+    set leaving? false
     set ishome? true
     set heading 0
     ;;have to send them home
@@ -161,11 +162,13 @@ to lay-phermone
   [
     if (phermone < out-pher)
     [
+      set phermone (phermone + 1)
     ]
   ]
   [;;else;;
     if (phermone < in-pher)
     [
+      set phermone (phermone + 1)
     ]
   ]
 end
@@ -192,12 +195,44 @@ to pick-a-patch
   ;;the move after leaving home
 
   ;;need some hyperbolic tan
-  let l_l phermones
-  let l_r phermones
+  let l_l 0
+  let l_r 0
+  let z 0
+  let tanh 0
+  let P_m 0
+  let x ( (random 100) / 100)
+  let p_l 0
+  let p_r 0
+
+  ;;okay so i want the scent to the left, and to the right. if i understand this correctly, then...
+  lt 45 ;; turn left 45 degrees from normal
+  set l_l phermones
+  rt 90 ;; turn right 45 degrees from normal
+  set l_r phermones
+  lt 45 ;;return to normal
+  set z ( ( (l_l + l_r) / 100) - 1)
+  set tanh ( ( exp(2 * z) - 1 ) / ( exp(2 * z) + 1 ) )
+  ;; Does it move?
+  set P_m ( 0.5 * (tanh + 1) )
+
+  if ( x < P_m)
+  [
+    set move? true
+    lay-phermone
+  ]
+
+  ;;maybe break this bit into two just for a bit...
+
+  if (move?)
+  [
+    ;;get p_l
+    set p_l ( ((k + l_l) ^ n) / ( (k + l_l) ^ n + (k + l_r) ^ n ) )
+  ]
+
 
 end
-to pick-next-patch
-  ;;any move not from the home
+to pick-a-patch-returned
+  ;;should be a bit better than test it every time to see if it's facing home.
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -341,6 +376,36 @@ NIL
 NIL
 NIL
 1
+
+SLIDER
+202
+312
+374
+345
+k
+k
+1
+100
+5.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+203
+353
+375
+386
+n
+n
+1
+100
+2.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
