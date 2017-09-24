@@ -3,7 +3,7 @@ breed [foods food]
 breed [ants ant]
 
 ants-own [hasfood? move? hasleft? ishome? num-dead]
-foods-own []
+foods-own [density]
 patches-own [phermone]
 
 to setup
@@ -65,7 +65,7 @@ to setup-food
     create-foods (vol-food)  ;; make the food
     ask foods
       [
-        set vol-food vol-food
+        set density food-density
       ]
     ask foods
       [
@@ -188,13 +188,18 @@ end
 to find-food
   ifelse (count foods-here > 0)
   [
-    set vol-food (vol-food - 1)
-    ask foods-here
-    [
-      die
-    ]
+    ;;there is food.
     set hasfood? true
     set found-food (found-food + 1)
+    ask foods-here
+    [
+      set density (density - 1)
+      if (density <= 0)
+      [
+        ;;no more food!
+        die
+      ]
+    ]
     ;;turn around
     set heading 180
     ;;go home
@@ -330,7 +335,10 @@ to pick-a-patch-returned
   [
     set p_l 0
   ]
-
+  if (l_r < threshold)
+  [
+    set p_l 0
+  ]
 
   ifelse (x < p_l)
   [
@@ -607,6 +615,21 @@ antsperpatch
 100
 20.0
 5
+1
+NIL
+HORIZONTAL
+
+SLIDER
+255
+526
+427
+559
+food-density
+food-density
+1
+100
+3.0
+1
 1
 NIL
 HORIZONTAL
