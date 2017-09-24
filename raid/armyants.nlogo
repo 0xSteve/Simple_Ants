@@ -1,8 +1,8 @@
-globals[screen-area vol-food out-pher in-pher evap xhome yhome clock nest-food sqrt2]
+globals[screen-area vol-food out-pher in-pher evap xhome yhome clock nest-food sqrt2 antsperpatch]
 breed [foods food]
 breed [ants ant]
 
-ants-own [hasfood? move? hasleft? ishome? leaving? num-dead]
+ants-own [hasfood? move? hasleft? ishome? num-dead]
 foods-own []
 patches-own [phermone]
 
@@ -27,6 +27,10 @@ end
 to step
   setup-ants
   ant-move
+  ;;remove this line
+  ask ants [
+  pick-a-patch
+  ]
 end
 
 to clear
@@ -96,7 +100,7 @@ to setup-ants
   ;; maybe i should kill ants that refuse to leave the nest?
   ask ants
   [
-    if hasleft? = false
+    if (not hasleft?)
     [
       die
       set num-dead (num-dead + 1)
@@ -106,7 +110,6 @@ to setup-ants
   [
     set hasfood? false
     set hasleft? false
-    set leaving? false
     set ishome? true
     set heading 0
     ;;have to send them home
@@ -158,7 +161,7 @@ to ant-move
 end
 
 to lay-phermone
-  ifelse (leaving?)
+  ifelse (hasleft?)
   [
     if (phermone < out-pher)
     [
@@ -175,6 +178,9 @@ end
 
 to-report phermones
   report [phermone] of patch-at dx dy
+end
+to-report ants-at-pos
+  report count ants-at dx dy
 end
 
 to find-food
@@ -217,7 +223,9 @@ to pick-a-patch
 
   if ( x < P_m)
   [
+    print("Agent will move")
     set move? true
+    set hasleft? true
     lay-phermone
   ]
 
@@ -227,9 +235,58 @@ to pick-a-patch
   [
     ;;get p_l
     set p_l ( ((k + l_l) ^ n) / ( (k + l_l) ^ n + (k + l_r) ^ n ) )
+    set p_r ( 1 - p_l )
+
+    ;; roll the dice again to see which direction we travel
+    set x ( (random 100) / 100)
+    ifelse (x < p_l)
+    [
+      print("agent turns left!")
+      ;;turn left;;
+      set heading 0 ;;reset heading
+      lt 45
+      ifelse (ants-at-pos < antsperpatch)
+      [
+        jump sqrt2
+        set heading 0
+      ]
+      [;;else;;
+        rt 90
+        ifelse (ants-at-pos < antsperpatch)
+        [
+          jump sqrt2
+          set heading 0
+        ]
+        [
+          ;;can't move!
+          fd 0
+        ]
+      ]
+    ]
+    [
+      ;;turn right;;
+      print("agent turns right!")
+      set heading 0 ;;reset heading
+      rt 45
+      ifelse (ants-at-pos < antsperpatch)
+      [
+        jump sqrt2
+        set heading 0
+      ]
+      [;;else;;
+        lt 90
+        ifelse (ants-at-pos < antsperpatch)
+        [
+          jump sqrt2
+          set heading 0
+        ]
+        [
+          jump 0
+        ]
+      ]
+    ]
   ]
-
-
+  set move? false
 end
 to pick-a-patch-returned
   ;;should be a bit better than test it every time to see if it's facing home.
@@ -238,11 +295,11 @@ end
 GRAPHICS-WINDOW
 429
 10
-639
-421
+740
+622
 -1
 -1
-2.0
+3.0
 1
 10
 1
