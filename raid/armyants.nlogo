@@ -1,4 +1,4 @@
-globals[screen-area vol-food out-pher in-pher evap xhome yhome clock nest-food sqrt2 antsperpatch found-food]
+globals[screen-area vol-food out-pher in-pher xhome yhome clock nest-food sqrt2 antsperpatch found-food]
 breed [foods food]
 breed [ants ant]
 
@@ -20,7 +20,6 @@ to setup
   set antsperpatch 10
   set found-food 0
   set nest-food 0
-  set evap (1 / 30)
   set sqrt2 1.41421356
   ;;setup-patches
   setup-food
@@ -561,6 +560,21 @@ n
 1
 100
 2.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+130
+196
+302
+229
+evap
+evap
+0
+100
+0.8
 1
 1
 NIL
