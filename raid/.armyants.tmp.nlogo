@@ -315,7 +315,7 @@ to pick-a-patch-returned
   set heading 225 ;; turn right 45 degrees from normal
   set l_r phermones
   set heading 180 ;;return to normal
-  set z ( ( (l_l + l_r) / 100) - 1)
+  set z ( ( (l_l + l_r)) - 1)
   set tanh ( ( exp(2 * z) - 1 ) / ( exp(2 * z) + 1 ) )
   ;; Does it move?
   set P_m ( 0.5 * (tanh + 1) )
@@ -337,9 +337,41 @@ to pick-a-patch-returned
   ]
   if (l_r < threshold)
   [
-    set p_ 0
+    set p_r 0
   ]
-
+  ;;they can go astray here if both probabilities are zero. have to adjust here.
+  ;;I found a similar ants example online and that example uses a bias and a correction.
+  ;;Talk to prof about this.
+  ifelse (p_l + p_r = 0) and (xCor < 0)
+  [
+    ;;forcing a jump like this might be illegal? talk to the prof.
+    set heading 135
+    jump sqrt2
+    set heading 180
+    set move? false
+  ]
+  [
+    ifelse (p_l + p_r = 0) and (xCor > 0)
+    [
+      set heading 225
+      jump sqrt2
+      set heading 180
+      set move? false
+    ]
+    [
+      ifelse (p_l + p_r = 0)
+      [
+        ;;is this even a legal move? I'm not sure, but it at least goes towards the home.
+        set heading 180
+        jump 1
+        set move? false
+      ]
+      [ set p_l (p_l / (p_l + p_r) )
+        set p_r (p_r / (p_l + p_r) )
+      ]
+    ]
+  ]
+  ;;the above corrects for outside of threshold. Now for regular movement...
   ifelse (x < p_l)
   [
     ;;turn left;;
@@ -347,14 +379,14 @@ to pick-a-patch-returned
     ifelse (ants-at-pos < antsperpatch)
     [
       jump sqrt2
-      set heading 0
+      set heading 180
     ]
     [;;else;;
       set heading 135
       ifelse (ants-at-pos < antsperpatch)
       [
         jump sqrt2
-        set heading 0
+        set heading 180
       ]
       [
         ;;can't move!
@@ -363,7 +395,7 @@ to pick-a-patch-returned
   ]
   [
     ;;turn right;;
-    set heading 0 ;;reset heading
+    set heading 180 ;;reset heading
     set heading 135
     ifelse (ants-at-pos < antsperpatch)
     [
