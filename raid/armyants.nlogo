@@ -330,6 +330,10 @@ to pick-a-patch-returned
   [
     set p_l 0
   ]
+  if (l_r < threshold)
+  [
+    set p_l 0
+  ]
 
   ifelse (x < p_l)
   [

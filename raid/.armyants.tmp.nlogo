@@ -328,7 +328,9 @@ to pick-a-patch-returned
   let threshold 5
   if (l_l < threshold)
   [
-    set p
+    set p_l 0
+  ]
+
 
   ifelse (x < p_l)
   [
