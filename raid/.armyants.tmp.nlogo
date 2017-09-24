@@ -337,7 +337,7 @@ to pick-a-patch-returned
   ]
   if (l_r < threshold)
   [
-    set p_l 0
+    set p_ 0
   ]
 
   ifelse (x < p_l)
