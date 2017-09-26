@@ -20,7 +20,7 @@ to setup
   set snap-to-home 5
   set found-food 0
   set nest-food 0
-  set sqrt2 1.41421356237
+  set sqrt2
   ;;setup-patches
   setup-food
 end
