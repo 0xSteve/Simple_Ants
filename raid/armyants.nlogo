@@ -310,9 +310,9 @@ to pick-a-patch-returned
   let p_r 0
 
   ;;i should set heading to 180 and rotate, but i dont feel like thinking
-  set heading 135 ;; turn left 45 degrees from normal
+  set heading 225
   set l_l phermones
-  set heading 225 ;; turn right 45 degrees from normal
+  set heading 135
   set l_r phermones
   set heading 180 ;;return to normal
   set z ( ( (l_l + l_r) / 100) - 1)
@@ -321,9 +321,13 @@ to pick-a-patch-returned
   set P_m ( 0.5 * (tanh + 1) )
 
   ;;if they are returning home they should never question whether or not to move.
+  ;;but perhaps they should question whether or not to lay a phermone trail?
+  if (x < P_m)
+  [
+    lay-phermone
+  ]
   set move? true
   set hasleft? true
-  lay-phermone
 
   ;;get p_l
   set p_l ( ((k + l_l) ^ n) / ( (k + l_l) ^ n + (k + l_r) ^ n ) )
@@ -348,7 +352,6 @@ to pick-a-patch-returned
     set heading 135
     jump sqrt2
     set heading 180
-    set move? false
   ]
   [
     ifelse (p_l + p_r = 0) and (xCor > 0)
@@ -356,7 +359,6 @@ to pick-a-patch-returned
       set heading 225
       jump sqrt2
       set heading 180
-      set move? false
     ]
     [
       ifelse (p_l + p_r = 0)
@@ -364,11 +366,10 @@ to pick-a-patch-returned
         ;;is this even a legal move? I'm not sure, but it at least goes towards the home.
         set heading 180
         jump 0
-        set move? false
       ]
       [
-        ;;set p_l (p_l / (p_l + p_r) )
-        ;;set p_r (p_r / (p_l + p_r) )
+        set p_l (p_l / (p_l + p_r) )
+        set p_r (p_r / (p_l + p_r) )
       ]
     ]
   ]
