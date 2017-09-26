@@ -9,6 +9,10 @@ patches-own [phermone]
 to setup
   clear-all
   reset-ticks
+  ask patches
+  [
+    set pcolor brown
+  ]
   set-default-shape ants "bug" ;; really no reason to do this considering how zoomed out we are. might just remove this.
   set-default-shape foods "circle" ;; food can be a circle, right?
   set screen-area (max-pxcor * max-pycor * 2) ;;times 2 if bottom center, times 4 if middle
@@ -124,7 +128,7 @@ to ant-move
   [
     ifelse ishome?
     [;;currently at home, time to make a move.
-      set color white
+      set color black
       set heading 0
       set ishome? false
       set hasleft? true
@@ -143,7 +147,7 @@ to ant-move
         ifelse hasfood?
         [
           ;;if the ant has food send it home!
-          set color red
+          set color
           ;;If sufficiently close to the nest, become home.
           if distancexy-nowrap xhome yhome < snap-to-home
                   [
@@ -359,7 +363,6 @@ to pick-a-patch-returned
       set heading 225
       jump sqrt2
       set heading 180
-      set move? false
     ]
     [
       ifelse (p_l + p_r = 0)
@@ -367,11 +370,10 @@ to pick-a-patch-returned
         ;;is this even a legal move? I'm not sure, but it at least goes towards the home.
         set heading 180
         jump 0
-        set move? false
       ]
       [
-        ;;set p_l (p_l / (p_l + p_r) )
-        ;;set p_r (p_r / (p_l + p_r) )
+        set p_l (p_l / (p_l + p_r) )
+        set p_r (p_r / (p_l + p_r) )
       ]
     ]
   ]
