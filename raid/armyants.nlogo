@@ -488,7 +488,7 @@ amount-food
 amount-food
 0
 100
-10.0
+8.0
 1
 1
 NIL
@@ -554,7 +554,7 @@ it-max
 it-max
 1
 100000
-47134.0
+5096.0
 1
 1
 NIL
@@ -586,7 +586,7 @@ k
 k
 1
 100
-1.0
+10.0
 1
 1
 NIL
@@ -601,7 +601,7 @@ n
 n
 1
 100
-1.0
+2.0
 1
 1
 NIL
@@ -616,7 +616,7 @@ evap
 evap
 0
 100
-81.0
+4.0
 1
 1
 NIL
@@ -646,7 +646,7 @@ antsperpatch
 antsperpatch
 10
 100
-10.0
+20.0
 5
 1
 NIL
@@ -661,7 +661,7 @@ food-density
 food-density
 1
 100
-2.0
+1.0
 1
 1
 NIL
