@@ -443,11 +443,11 @@ end
 GRAPHICS-WINDOW
 429
 10
-839
-621
+800
+622
 -1
 -1
-2.0
+3.0
 1
 10
 1
@@ -457,10 +457,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--100
-100
+-60
+60
 0
-300
+200
 1
 1
 1
@@ -493,7 +493,7 @@ amount-food
 amount-food
 0
 100
-8.0
+71.0
 1
 1
 NIL
@@ -666,7 +666,7 @@ food-density
 food-density
 1
 100
-1.0
+10.0
 1
 1
 NIL
@@ -685,11 +685,11 @@ NIL
 0.0
 10.0
 true
-false
+true
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plotxy clock found-food"
-"pen-1" 1.0 0 -7500403 true "" "plotxy clock nest-food"
+"Food Found" 1.0 0 -16777216 true "" "plotxy clock found-food"
+"Food at Nest" 1.0 0 -7500403 true "" "plotxy clock nest-food"
 
 @#$#@#$#@
 ## WHAT IS IT?

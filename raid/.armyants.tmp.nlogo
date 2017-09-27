@@ -147,7 +147,7 @@ to ant-move
         ifelse hasfood?
         [
           ;;if the ant has food send it home!
-          set color
+          set color white
           ;;If sufficiently close to the nest, become home.
           if distancexy-nowrap xhome yhome < snap-to-home
                   [
@@ -493,7 +493,7 @@ amount-food
 amount-food
 0
 100
-8.0
+71.0
 1
 1
 NIL
@@ -666,7 +666,7 @@ food-density
 food-density
 1
 100
-1.0
+10.0
 1
 1
 NIL
@@ -685,11 +685,11 @@ NIL
 0.0
 10.0
 true
-false
+true
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plotxy clock found-food"
-"pen-1" 1.0 0 -7500403 true "" "plotxy clock nest-food"
+"Food Found" 1.0 0 -16777216 true "" "plotxy clock found-food"
+"Food at Nest" 1.0 0 -7500403 true "" "plotxy clock nest-food"
 
 @#$#@#$#@
 ## WHAT IS IT?
