@@ -1,0 +1,28 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Assignment 1}
+\date{}
+\author{Steven Porretta \\ 100756494}
+
+\begin{document}
+\section{Introduction}
+	The army ant raiding problem is essentially a gathering problem where many mobile-agents, called ants, venture forth from a unique starting location referred to as a nest. The value of this model has potential to improve working conditions in dangerous real-world environments like the clean-up of hazardous waste. In the exploration of the army ant raiding problem some key features of the model will be discussed heurisitically.
+
+\section{Background}
+	In the army ant raiding model, each ant moves away from the nest by walking from site to site by moving either, diagonally to the left, or diagonally to the right, much like the movement of a bishop in a game of chess in a diagonal grid pattern as in Figure~\ref{fig:move}, where each black square is a location where $Ant_i$ is capable of moving to. The ant moves with probability $\mathbb{P}_m$ and if it moves, then it moves at most to one site to the left with probability $\mathbb{P}_l$ or one site to the right with $\mathbb{P}_r$ as in Equations~\eqref{eq:move,eq:left,eq:right}, respectively. When the ant makes a movement it also leaves a breadcrumb behind referred to as a pheromone trail.
+
+	The goal of the ants is to collect as much information, called food, for which the distribution throughout the environment is not a priori. Once an ant has found food, it picks it up, either reducing it's quantity from the environment or removing it all together, and turns to face the opposite heading. Returning back to the nest for the ant is not a simple task, since this ant should carry the food back to the nest by using pheromone trails alone.
+
+	To improve the probability that an ant returns to the nest with a high success rate, the pheromone trail is said to evaporate over time. This may seem counter-intuitive, but it will be discussed further in Section~\ref{sec:suc}
+
+\section{Foraging Patterns}\labe{sec:pats}
+\section{Effect of Food on Foraging} \label{sec:food}
+\section{Effect of n and k}\label{sec:nandk}
+\section{successful foraging}\label{sec:suc}
+
+
+\end{document}

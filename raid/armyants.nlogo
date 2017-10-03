@@ -19,7 +19,7 @@ to setup
   set out-pher 1000
   set in-pher 300
   set xhome 0
-  set yhome 0
+  set yhome 5
   set clock 0
   set snap-to-home 5
   set found-food 0
@@ -468,10 +468,10 @@ ticks
 30.0
 
 BUTTON
-290
-41
-363
-74
+275
+10
+348
+43
 NIL
 setup
 NIL
@@ -485,42 +485,25 @@ NIL
 1
 
 SLIDER
-61
-142
-233
-175
+218
+56
+390
+89
 amount-food
 amount-food
 0
 100
-71.0
+75.0
 1
 1
 NIL
 HORIZONTAL
 
 BUTTON
-326
-104
-390
-137
-NIL
-step
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-356
-177
-419
-210
+357
+10
+420
+43
 NIL
 go
 T
@@ -534,10 +517,10 @@ NIL
 1
 
 BUTTON
-211
-42
-278
-75
+199
+10
+266
+43
 NIL
 clear
 NIL
@@ -551,40 +534,40 @@ NIL
 1
 
 SLIDER
-132
-237
-304
-270
+222
+396
+394
+429
 it-max
 it-max
 1
-100000
-5096.0
-1
+2000
+1200.0
+200
 1
 NIL
 HORIZONTAL
 
 SLIDER
-202
-312
-374
-345
+218
+162
+390
+195
 k
 k
 1
 100
-10.0
+5.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
+219
 203
-353
-375
-386
+391
+236
 n
 n
 1
@@ -596,25 +579,25 @@ NIL
 HORIZONTAL
 
 SLIDER
-130
-196
-302
-229
+220
+245
+392
+278
 evap
 evap
 0
 100
-4.0
+5.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-260
-444
-432
-477
+222
+353
+394
+386
 antspinterval
 antspinterval
 1
@@ -626,30 +609,30 @@ NIL
 HORIZONTAL
 
 SLIDER
-193
-391
-365
-424
+221
+309
+393
+342
 antsperpatch
 antsperpatch
 10
 100
-20.0
+25.0
 5
 1
 NIL
 HORIZONTAL
 
 SLIDER
-255
-526
-427
-559
+218
+99
+390
+132
 food-density
 food-density
 1
 100
-10.0
+35.0
 1
 1
 NIL
@@ -658,9 +641,9 @@ HORIZONTAL
 PLOT
 819
 10
-1235
-398
-plot 1
+1366
+413
+Food Found Vs. Food Returned to Nest
 NIL
 NIL
 0.0
@@ -672,55 +655,75 @@ true
 "" ""
 PENS
 "Food Found" 1.0 0 -16777216 true "" "if(ploton?) [plotxy clock found-food]"
-"Food at Nest" 1.0 0 -7500403 true "" "if(ploton?) [plotxy clock nest-food]"
+"Food Returned" 1.0 0 -7500403 true "" "if(ploton?) [plotxy clock nest-food]"
 
 SWITCH
-874
-425
-984
-458
+819
+421
+929
+454
 ploton?
 ploton?
-0
+1
 1
 -1000
 
 @#$#@#$#@
 ## WHAT IS IT?
 
-(a general understanding of what the model is trying to show or explain)
+A simple incarnation of the Army Ants Raiding problem.
 
 ## HOW IT WORKS
 
-(what rules the agents use to create the overall behavior of the model)
+For this model there are two breeds of agents: foods, and ants. 
+
+The food agents are scattered randomly around the environment and are allowed to overlap each other in space. These food agents have a property called, density, which defines how much food can be harvested by an ant. It is assumed that each ant can carry 1 food item and thus the density is an integer value.
+
+The ant agents each originate from a common nest and move away from the nest with probability either to the left or right along a diagonal path, or not at all. The ant lays a pheromone trail by depositing pheromone at each patch it encounters. 
+If the ant finds a food item, it turns around and moves with probability 1 in the opposite direction. Again the movement is left or right along a diagonal path. However, this time the ant will bias it's movement to focus on patches with high pheromone concentration. Increasing probability that it will successfully return food to the nest. Finally, if the ant is sufficiently close to the nest it will return the food. If the ant contacts a boundary it will die.
 
 ## HOW TO USE IT
 
-(how to use the model, including a description of each of the items in the Interface tab)
+1) To use it without adjusting default values simply click the setup button and then press the go button.
+
+2) To restart the simulation click the clear button and then repeat step (1).
+
+The sliders control different environment or model parameters. N and K sliders represent the user defined parameters of the probabilistic ant model.
+
+Sliders:
+amount-food -> Defines the proportion of food on the map relative to the total number of patches.
+food-density -> Defines the amount of food stored in each food agent.
+antsperpatch -> Defines the maximum number of ants allowed to occupy a patch.
+evap -> Determines how rapidly pheromone evaporates from a patch.
+antsperinterval -> Defines the number of ants born from the nest for each unit of time.
+it-max -> Defines the maximum number of iterations before the algorithm terminates.
+
+Swithces:
+ploton? -> Control whether or not the plot will output plot data. Turn this off if Netlogo is choking your computer.
 
 ## THINGS TO NOTICE
 
-(suggested things for the user to notice while running the model)
+Notice the shape of the raid front, and notice how the threshold forces the returning ants to envelope the raiding ants in a way which is similar to what one sees in nature.
 
 ## THINGS TO TRY
 
-(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
+I think the most interesting variables to play with are N and K to change the shape of the raid.
+
+Another interesting thing to do is change the limits of ants being born and allowed on a patch.
 
 ## EXTENDING THE MODEL
+One thing that is partially ready is a hasleft? variable to kill ants that refuse to leave the nest within a certain number of moves.
 
-(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
+Another possibility is to kill ants that stray on their way home, by limiting the number of no-pheromone patches they are allowed to walk on before dropping food.
+
+And see what happens if we add multiple nest entrances/exists or different breeds of ant that will fight with each other.
 
 ## NETLOGO FEATURES
 
 (interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
 
-## RELATED MODELS
-
-(models in the NetLogo Models Library and elsewhere which are of related interest)
-
-## CREDITS AND REFERENCES
-
-(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
+## ASSUMPTIONS
+It is assumed that the ants share a common awareness of heading.
 @#$#@#$#@
 default
 true
