@@ -565,23 +565,6 @@ it-max
 NIL
 HORIZONTAL
 
-BUTTON
-254
-114
-332
-147
-NIL
-test
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
 SLIDER
 202
 312
@@ -673,10 +656,10 @@ NIL
 HORIZONTAL
 
 PLOT
-70
-618
-486
-1006
+819
+10
+1235
+398
 plot 1
 NIL
 NIL
@@ -688,8 +671,19 @@ true
 true
 "" ""
 PENS
-"Food Found" 1.0 0 -16777216 true "" "plotxy clock found-food"
-"Food at Nest" 1.0 0 -7500403 true "" "plotxy clock nest-food"
+"Food Found" 1.0 0 -16777216 true "" "if(ploton?) [plotxy clock found-food]"
+"Food at Nest" 1.0 0 -7500403 true "" "if(ploton?) [plotxy clock nest-food]"
+
+SWITCH
+874
+425
+984
+458
+ploton?
+ploton?
+0
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
